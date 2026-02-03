@@ -30,4 +30,4 @@ RUN pip install --no-cache-dir fastapi>=0.100.0 uvicorn[standard] gunicorn  # ç›
 COPY . .
 
 EXPOSE 8000
-CMD ["gunicorn", "main:app", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:8000"]
+CMD ["gunicorn", "app.main:app", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:8000"]

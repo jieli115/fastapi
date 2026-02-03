@@ -1,8 +1,8 @@
 version: '3.8'
 services:
   fastapi:
-    # image: crpi-j8chxoc53n9pz1ge.cn-zhangjiakou.personal.cr.aliyuncs.com/wta_space/first_fastapi:v3
-    build: .
+    image: crpi-j8chxoc53n9pz1ge.cn-zhangjiakou.personal.cr.aliyuncs.com/wta_space/fastapi_git:v1
+    # build: .
     container_name: fastapi_service
     ports:
       - "8000:8000"
