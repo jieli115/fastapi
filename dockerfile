@@ -7,10 +7,10 @@ RUN apt update && apt install -y --no-install-recommends \
     gcc \
     g++ \
     libpq-dev \
-    ca-certificates \  # 修复HTTPS证书问题
-    curl \              # 测试网络
+    ca-certificates \ 
+    curl \            
     && rm -rf /var/lib/apt/lists/* \
-    && update-ca-certificates  # 更新证书
+    && update-ca-certificates 
 
 # 关键2：升级pip到最新版（解决版本解析问题）
 RUN pip install --upgrade pip
