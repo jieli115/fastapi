@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  fastapi:
+    image: crpi-j8chxoc53n9pz1ge.cn-zhangjiakou.personal.cr.aliyuncs.com/wta_space/first_fastapi:v3
+    # build: .
+    container_name: fastapi_service
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    volumes:
+      - ./logs:/app/logs
+      - ./:/app
+    

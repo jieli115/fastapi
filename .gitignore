@@ -1,0 +1,62 @@
+# 1. Python核心忽略（必选）
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# 2. 虚拟环境（必选）
+venv/
+env/
+ENV/
+.venv/
+.env/
+
+# 3. 环境变量和敏感配置（必选）
+.env
+.env.*
+!.env.example  # 保留示例配置（如果有）
+.secrets/
+*.pem
+*.key
+
+# 4. IDE/编辑器配置（可选，根据你的编辑器调整）
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store  # Mac系统文件
+Thumbs.db  # Windows系统文件
+
+# 5. 日志和临时文件（可选）
+*.log
+logs/
+tmp/
+temp/
+
+# 6. 测试/覆盖率报告（可选）
+.coverage
+htmlcov/
+.pytest_cache/
+
+# 7. Docker相关（可选，避免提交容器/镜像相关文件）
+.dockerignore
+docker-compose.override.yml
+*.dockerfile
