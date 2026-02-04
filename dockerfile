@@ -24,10 +24,10 @@ RUN pip search fastapi || echo "pip search不可用，但不影响安装"
 
 # 安装依赖（优先用宽松版本范围，避免版本卡死后端）
 COPY requirements.txt .
-RUN pip install --no-cache-dir fastapi>=0.100.0 uvicorn[standard] gunicorn  # 直接安装核心包，跳过requirements.txt的版本坑
+RUN pip install --no-cache-dir -r requirements.txt -i  
 
 # 复制项目代码
 COPY . .
 
 EXPOSE 8000
-CMD ["gunicorn", "app.main:app", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:8000"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"]
