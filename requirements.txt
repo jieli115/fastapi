@@ -146,7 +146,7 @@ ragas==0.4.1
 redis==7.0.1
 referencing==0.37.0
 regex==2025.11.3
-requests==2.32.5
+requests==2.31.0
 requests-oauthlib==2.0.0
 requests-toolbelt==1.0.0
 rich==14.2.0
