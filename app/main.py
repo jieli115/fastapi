@@ -5,7 +5,7 @@ app =FastAPI()
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World 666"}
+    return {"message": "Hello World xxx"}
 
 @app.get("/hello/{name}")
 async def say_hello(name: str):

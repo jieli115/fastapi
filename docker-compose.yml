@@ -4,10 +4,12 @@ services:
     image: crpi-j8chxoc53n9pz1ge.cn-zhangjiakou.personal.cr.aliyuncs.com/wta_space/fastapi_git:v1
     # build: .
     container_name: fastapi_service
+    platform: linux/amd64  
     ports:
       - "8000:8000"
     restart: unless-stopped
     volumes:
       - ./logs:/app/logs
       - ./:/app
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
     
