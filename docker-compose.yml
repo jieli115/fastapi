@@ -12,4 +12,6 @@ services:
       - ./logs:/app/logs
       - ./:/app
     command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    environment:
+      - DASHSCOPE_API_KEY=sk-4c090517eb6a44c3aad1b15860848f73
     
