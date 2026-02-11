@@ -2,10 +2,10 @@ import redis
 
 # 连接Docker容器里的Redis
 r = redis.Redis(
-    host="127.0.0.1",    # 本地IP，对应Docker端口映射
-    port=6379,           # 映射的本地端口
+    host="127.0.0.1",  # 本地IP，对应Docker端口映射
+    port=6379,  # 映射的本地端口
     password="",  # 你的Redis密码
-    decode_responses=True  # 自动转字符串，避免乱码
+    decode_responses=True,  # 自动转字符串，避免乱码
 )
 
 try:

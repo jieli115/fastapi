@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>王工财经助手 - 聊天界面</title>
+    <!-- 添加 Markdown 解析库 -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: 600px;
+            height: 80vh;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 70%;
+            padding: 10px 15px;
+            border-radius: 18px;
+            position: relative;
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background-color: #dcf8c6;
+            border-bottom-right-radius: 4px;
+        }
+
+        .ai-message {
+            align-self: flex-start;
+            background-color: white;
+            border: 1px solid #e0e0e0;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message-content {
+            word-wrap: break-word;
+        }
+
+        /* Markdown 样式 */
+        .message-content h1, .message-content h2, .message-content h3 {
+            margin: 10px 0 5px 0;
+            font-weight: bold;
+        }
+
+        .message-content h1 {
+            font-size: 18px;
+        }
+
+        .message-content h2 {
+            font-size: 16px;
+        }
+
+        .message-content h3 {
+            font-size: 14px;
+        }
+
+        .message-content p {
+            margin: 5px 0;
+            line-height: 1.4;
+        }
+
+        .message-content ul, .message-content ol {
+            margin: 5px 0 5px 20px;
+        }
+
+        .message-content li {
+            margin: 3px 0;
+        }
+
+        .message-content code {
+            background-color: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        .message-content pre {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 5px 0;
+        }
+
+        .message-content pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+
+        .message-content blockquote {
+            border-left: 3px solid #4CAF50;
+            padding-left: 10px;
+            margin: 5px 0;
+            color: #666;
+        }
+
+        .message-time {
+            font-size: 10px;
+            color: #999;
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        .chat-input-area {
+            padding: 15px;
+            border-top: 1px solid #e0e0e0;
+            background-color: white;
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 14px;
+            resize: none;
+        }
+
+        .chat-button {
+            padding: 0 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-button:hover {
+            background-color: #45a049;
+        }
+
+        .chat-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            align-self: flex-start;
+            padding: 10px 15px;
+            background-color: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 18px;
+            border-bottom-left-radius: 4px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .error {
+            align-self: center;
+            padding: 10px 15px;
+            background-color: #ffebee;
+            border: 1px solid #ffcdd2;
+            border-radius: 18px;
+            font-size: 14px;
+            color: #c62828;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">王工财经助手-山寨版（施工中）</div>
+        
+        <div class="chat-messages" id="chat-messages">
+            <!-- 系统欢迎消息 -->
+            <div class="message ai-message">
+                <div class="message-content">你好！我是王工的山寨版财经助手，可以向我询问财经相关问题，我会告诉你相关答案。</div>
+                <div class="message-time">刚刚</div>
+            </div>
+        </div>
+        
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" class="chat-input" placeholder="输入问题...">
+            <button id="chat-button" class="chat-button">发送</button>
+        </div>
+    </div>
+    
+    <script>
+        // 获取DOM元素
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
+        const chatButton = document.getElementById('chat-button');
+        
+        // 发送消息函数
+        async function sendMessage() {
+            const input = chatInput.value.trim();
+            
+            if (!input) {
+                return;
+            }
+            
+            // 清空输入框
+            chatInput.value = '';
+            
+            // 添加用户消息到界面
+            addMessage(input, 'user');
+            
+            // 显示加载状态
+            const loadingElement = addLoading();
+            
+            // 禁用发送按钮
+            chatButton.disabled = true;
+            
+            try {
+                // 调用API获取答案
+                const response = await fetch(`/chat?input=${encodeURIComponent(input)}`);
+                
+                if (!response.ok) {
+                    throw new Error('请求失败');
+                }
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                // 移除加载状态
+                loadingElement.remove();
+                
+                // 添加AI回复到界面
+                addMessage(data.result, 'ai');
+            } catch (e) {
+                // 移除加载状态
+                loadingElement.remove();
+                
+                // 显示错误消息
+                addError(e.message);
+            } finally {
+                // 启用发送按钮
+                chatButton.disabled = false;
+            }
+        }
+        
+        // 添加消息到聊天界面
+        function addMessage(content, sender) {
+            const messageElement = document.createElement('div');
+            messageElement.className = `message ${sender}-message`;
+            
+            const contentElement = document.createElement('div');
+            contentElement.className = 'message-content';
+            
+            // 解析Markdown格式
+            if (sender === 'ai') {
+                // 对AI消息进行Markdown解析
+                contentElement.innerHTML = marked.parse(content);
+            } else {
+                // 用户消息保持原样
+                contentElement.textContent = content;
+            }
+            
+            const timeElement = document.createElement('div');
+            timeElement.className = 'message-time';
+            timeElement.textContent = getCurrentTime();
+            
+            messageElement.appendChild(contentElement);
+            messageElement.appendChild(timeElement);
+            
+            chatMessages.appendChild(messageElement);
+            
+            // 滚动到底部
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // 添加加载状态
+        function addLoading() {
+            const loadingElement = document.createElement('div');
+            loadingElement.className = 'loading';
+            loadingElement.textContent = '正在生成答案...';
+            
+            chatMessages.appendChild(loadingElement);
+            
+            // 滚动到底部
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            return loadingElement;
+        }
+        
+        // 添加错误消息
+        function addError(message) {
+            const errorElement = document.createElement('div');
+            errorElement.className = 'error';
+            errorElement.textContent = `错误: ${message}`;
+            
+            chatMessages.appendChild(errorElement);
+            
+            // 滚动到底部
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // 获取当前时间
+        function getCurrentTime() {
+            const now = new Date();
+            return `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+        }
+        
+        // 绑定发送按钮点击事件
+        chatButton.addEventListener('click', sendMessage);
+        
+        // 绑定输入框回车事件
+        chatInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
