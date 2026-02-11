@@ -2,6 +2,8 @@
 <html>
 <head>
     <title>王工财经助手 - 聊天界面</title>
+    <!-- 添加 Markdown 解析库 -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -71,6 +73,65 @@
 
         .message-content {
             word-wrap: break-word;
+        }
+
+        /* Markdown 样式 */
+        .message-content h1, .message-content h2, .message-content h3 {
+            margin: 10px 0 5px 0;
+            font-weight: bold;
+        }
+
+        .message-content h1 {
+            font-size: 18px;
+        }
+
+        .message-content h2 {
+            font-size: 16px;
+        }
+
+        .message-content h3 {
+            font-size: 14px;
+        }
+
+        .message-content p {
+            margin: 5px 0;
+            line-height: 1.4;
+        }
+
+        .message-content ul, .message-content ol {
+            margin: 5px 0 5px 20px;
+        }
+
+        .message-content li {
+            margin: 3px 0;
+        }
+
+        .message-content code {
+            background-color: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        .message-content pre {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 5px 0;
+        }
+
+        .message-content pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+
+        .message-content blockquote {
+            border-left: 3px solid #4CAF50;
+            padding-left: 10px;
+            margin: 5px 0;
+            color: #666;
         }
 
         .message-time {
@@ -156,7 +217,7 @@
         </div>
         
         <div class="chat-input-area">
-            <input type="text" id="chat-input" class="chat-input" placeholder="输入故事主题...">
+            <input type="text" id="chat-input" class="chat-input" placeholder="输入问题...">
             <button id="chat-button" class="chat-button">发送</button>
         </div>
     </div>
@@ -188,7 +249,7 @@
             chatButton.disabled = true;
             
             try {
-                // 调用API获取故事
+                // 调用API获取答案
                 const response = await fetch(`/chat?input=${encodeURIComponent(input)}`);
                 
                 if (!response.ok) {
@@ -225,7 +286,15 @@
             
             const contentElement = document.createElement('div');
             contentElement.className = 'message-content';
-            contentElement.textContent = content;
+            
+            // 解析Markdown格式
+            if (sender === 'ai') {
+                // 对AI消息进行Markdown解析
+                contentElement.innerHTML = marked.parse(content);
+            } else {
+                // 用户消息保持原样
+                contentElement.textContent = content;
+            }
             
             const timeElement = document.createElement('div');
             timeElement.className = 'message-time';
